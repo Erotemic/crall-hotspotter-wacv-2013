@@ -1,0 +1,63 @@
+This is BibTeX, Version 0.99d (TeX Live 2020/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: wacv2013-author-kit/latex/ieee.bst
+Database file #1: crall_bibfile_ordered.bib
+Repeated entry---line 52 of file crall_bibfile_ordered.bib
+ : @inproceedings{accv04ChumLORANSAC
+ :                                  ,
+I'm skipping whatever remains of this entry
+Repeated entry---line 98 of file crall_bibfile_ordered.bib
+ : @article{pami11JegouDouzeSchmidProdQuant
+ :                                         ,
+I'm skipping whatever remains of this entry
+Name 1 in "O. Chum, and J. Matas, and S. Obdrzalek" has a comma at the end for entry accv04ChumLORANSAC
+while executing---line 1073 of file wacv2013-author-kit/latex/ieee.bst
+Name 2 in "O. Chum, and J. Matas, and S. Obdrzalek" has a comma at the end for entry accv04ChumLORANSAC
+while executing---line 1073 of file wacv2013-author-kit/latex/ieee.bst
+Name 1 in "O. Chum, and J. Matas, and S. Obdrzalek" has a comma at the end for entry accv04ChumLORANSAC
+while executing---line 1116 of file wacv2013-author-kit/latex/ieee.bst
+Name 2 in "O. Chum, and J. Matas, and S. Obdrzalek" has a comma at the end for entry accv04ChumLORANSAC
+while executing---line 1116 of file wacv2013-author-kit/latex/ieee.bst
+You've used 27 entries,
+            2120 wiz_defined-function locations,
+            636 strings with 8430 characters,
+and the built_in function-call counts, 7799 in all, are:
+= -- 673
+> -- 473
+< -- 0
++ -- 187
+- -- 158
+* -- 459
+:= -- 1375
+add.period$ -- 82
+call.type$ -- 27
+change.case$ -- 160
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 331
+empty$ -- 641
+format.name$ -- 158
+if$ -- 1602
+int.to.chr$ -- 0
+int.to.str$ -- 27
+missing$ -- 26
+newline$ -- 138
+num.names$ -- 54
+pop$ -- 228
+preamble$ -- 1
+purify$ -- 133
+quote$ -- 0
+skip$ -- 195
+stack$ -- 0
+substring$ -- 137
+swap$ -- 43
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 108
+warning$ -- 0
+while$ -- 54
+width$ -- 29
+write$ -- 273
+(There were 6 error messages)

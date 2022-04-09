@@ -1,0 +1,153 @@
+
+\section{One-Vs-One Matching}
+
+We describe the one-vs-one algorithm first and then present the
+modifications to create the faster one-vs-many algorithm.  Both
+algorithms consist of five steps: 1) preprocessing, 2) matching, 3)
+image scoring, 4) spatial reranking, and 5) label (animal name)
+scoring.
+
+\subsection{Preprocessing}
+
+Preprocessing involves extracting features and building search data structures.
+Before feature extraction, each database and query image is cropped to a rectangular region of interest (ROI) and
+resized to a standard dimension, while preserving aspect ratio.
+
+For image, $I$, either from the database or from the query, the
+features are locations $\vect{x}$ of spatial and scale extrema of the
+'Hessian-Hessian'~\cite{cvpr09PerdochEfficRep} operator applied to
+$I$.  This operator is faster and more stable than the standard
+'Hessian-Laplace'~\cite{ijcv05MikolajczykAffineRegion}, already
+known to outperform the 'DoG' operator used in \cite{11BoldgerWILDID}.  An
+elliptical shape is fit to the region
+\cite{ijcv05MikolajczykAffineRegion}, represented as a matrix
+$\matx{A}=[\begin{smallmatrix} a&0\\ b&c \end{smallmatrix}]$, with orientation angle, $\theta$~\cite{cvpr09PerdochEfficRep}.  Often $\theta$ is the aggregate of gradient
+directions in the region surrounding $\vect{x}$, but instead, we assume
+that the ``gravity vector'' is downward in each image and use this to
+simply assign $\theta =0$. Removing the invariance to the gradient direction increases the
+discrimination power of matching. For each region $(\vect{x},
+\matx{A})$ we extract a RootSIFT~\cite{cvpr12ArandjelovicThreeThings} descriptor, $\vect{d} \in
+\mathfrak{R}^{128}$, which is the
+the component-wise square root of the usual SIFT descriptor vector
+\cite{ijcv04LoweSIFT}.  Using the square root de-emphasizes the larger
+components in a SIFT vector, making it more resistant to changes
+between images.  The feature locations, elliptic regions and
+descriptors for each image $I$ are stored in three
+sets $\mathcal{X} = \{ \vect{x}_i \}, \mathcal{A} = \{ \matx{A}_i \}, \mathcal{D} = \{\vect{d}_i \}$.
+
+The second part of preprocessing is the construction of a fast search data
+structure.  For one-vs-one matching, we build a small forest of k-d
+trees \cite{cvpr08HartleyKDTree} for the query image descriptors
+using the VLFeat \cite{picm10VedaldiVLFEAT} library.  Since this is a one-vs-one
+algorithm it is not necessary to build a search data structure for
+each of the database images.
+
+\subsection{One-vs-One Matching} \label{sec:matching1}
+
+Let $I_D$ be the database image, with descriptor vectors
+$\mathcal{D}_D$, and let $I_Q$ be the query image with descriptor
+vectors $\mathcal{D}_Q$.  For each $\vect{d}_i \in \mathcal{D}_D$, the
+two closest query image descriptors, $\{\vect{q}_{j},
+\vect{q}_{j_2}\} \subset \mathcal{D}_Q$ are found (with high
+probability) through a restricted, prioritized search of the k-d tree
+forest.  Using the standard ratio-test \cite{ijcv04LoweSIFT}, a correspondence
+is formed between the $i$-th feature of $I_D$ and the $j$-th feature
+of $I_Q$ only if the ratio of nearest descriptor squared distances
+ \begin{equation} \label{eqn:ratio}
+ r_{i,j} = \frac{||\vect{d}_i - \vect{q}_{j_2}||^2}{||\vect{d}_i -  \vect{q}_{j}||^2}
+ \end{equation}
+exceeds some threshold, $t_{\tt ratio} = 1.6^2$.  All such
+matches are collected into a set $\mathcal{M}_D = \{ (i, j, r_{i,j}) \}$.
+
+\subsection{Initial Image Scoring} \label{sec:iis}
+
+The initial image score between each database image $I_D$ and the
+query image $I_Q$ depends simply on
+the ratios stored in the match set, which encourages numerous distinctive correspondences.
+\begin{equation} \label{eqn:sim}
+ Sim(\mathcal{M}_D) = \sum_{(i, j, r_{i,j}) \in \mathcal{M}_D} r_{i,j}
+\end{equation}
+%(THIS SEEMS A BIT ODD BECAUSE THE CONTRIBUTION OF A POTENTIAL
+%MATCH GOES FROM 0 IF IT IS JUST BELOW THE THRESHOLD TO THE
+%THRESHOLD VALUE IF IT IS JUST ABOVE!)
+
+%(DO WE NORMALIZE FOR THE NUMBER OF FEATURES IN $I_D$?)
+
+\subsection {Spatial Reranking} \label{sec:rerank1}
+
+The initial image scores are computed without regard to
+spatial constraints. To filter out any ``spatially inconsistent'' descriptors we implement the
+standard RANSAC solution used in \cite{cvpr07PhilbinObjRetriev} and described in \cite{accv04ChumLORANSAC}.
+We limit the computation
+to the $K_{SR} = 50$ images with top initial image-scores, $Sim(\mathcal{M}_D)$.
+
+%To ensure only ``spatially consistent''
+%descriptors are matched we implement the standard RANSAC solution used in
+%\cite{cvpr07PhilbinObjRetriev} and described in \cite{accv04ChumLORANSAC}.
+%The filtered set of matches is used to create a final image-score.
+%This is a fairly expensive process so we limit the computation to
+%the top $K_{SR} = 50$ initial image-scores from, $Sim(\mathcal{M}_D)$
+
+To filter matches between $I_D$ and $I_Q$, we compute a set
+of spatially consistent ``inliers'' for every match,
+$(i, j, r) \in \mathcal{M}_D$ using the transformation between
+ their affine shapes, $\matx{H} = \matx{A}_{i}^{-1}\matx{A}_{j}$.
+More precisely, inliers are matches where the distance of a query feature, projected by $\matx{H}$, to its matching database feature
+%, $||\matx{H}(\vect{x}_{j'}-\vect{x}_j)-(\vect{x}_{i'}-\vect{x}_i)||$,
+ is less than a spatial threshold, $t_{\tt sp}$. We set this to 10\% of $I_D$'s diagonal length.
+The largest set of inliers is used to estimate a final homography. % \cite{hartley1997defense},
+Inliers with respect to this homography become the final set of correspondences,
+$\mathcal{M}'_D$.  Applying the image scoring function
+$Sim(\mathcal{M}'_D)$ then determines the final, spatially-reranked
+image score.
+
+%\begin{equation} \label{eq:inlier}
+%\mathcal{M}_{\tt in}= \{ (i', j', r') \mid t_{\tt sp} > ||\matx{H}(\vect{x}_{j'}-\vect{x}_j)-(\vect{x}_{i'}-\vect{x}_i)||\}
+%\end{equation}
+
+%within some threshold define our inlier set.
+%
+%In particular, in order to filter the matches between $I_D$ and $I_Q$, for each
+%feature match, $(i, j, r_{i,j}) \in \mathcal{M}_D$, the affine matrices,
+%$\matx{A}_i$ and $\matx{A}_j$ (computed during feature extraction) are
+%used to generate a transformation from $I_Q$ to $I_D$: $\matx{H}_{\tt
+%  aff} = \matx{A}_{i}^{-1}\matx{A}_{j}$.  Each of the other
+%correspondences  $(i', j', r_{i',j'}) \in \mathcal{M}_D$ is tested to see
+%if it is consistent with this transformation, generating an ``inlier
+%set'':
+%\begin{equation} \label{eq:inlier}
+%\mathcal{M}_{\tt in} =  \{ (i', j', r_{i',j'}) \mid
+%\| \matx{H}_{\tt aff} (\vect{x}_{j'} - \vect{x}_j) - (\vect{x}_{i'} -
+%\vect{x}_i)\|^2 < t_{\tt sp} \}.
+%\end{equation}
+
+
+
+\subsection {Scoring of Labels} \label{sec:nmscore1}
+
+Because we are interested in determining a query animal's label and
+because there are typically multiple images associated with each label
+in the database, we must convert the scores for each image into scores
+for each label.  The simplest, obvious version, which we refer to as
+\emph{image scoring}, is to select the label of the highest scoring re-ranked image.
+ A second method, building off intuitions from
+the Naive Bayes approach to category recognition
+\cite{cvpr08BoimanInDefenseNN,cvpr11McCannLNBNN}, combines the scores from all
+images with the same label.  This score, which we refer to as \emph{label scoring}, is computed in three steps: For each label, (a) aggregate match sets,
+$\mathcal{M}'_D$, over all reranked images with this label, (b)
+ for each query descriptor, remove all but the best match, and (c) use the value of $Sim$ applied to this new set as the score for this label.
+%
+%Because we are interested in determining a query animal's label and
+%because there are typically multiple images associated with each label
+%in the database, we must convert the scores for the images into scores
+%for labels.  The simplest, obvious version, which we refer to as
+%\emph{image scoring}, is to select the highest scoring re-ranked image
+%for each label.  Labels with no image scoring high enough to be
+%reranked are ignored.  A second method, building off intuitions from
+%the Naive Bayes approach to category recognition
+%\cite{cvpr08BoimanInDefenseNN,cvpr11McCannLNBNN}, combines the
+%images for each label.  It computes an aggregate of the sets
+%$\mathcal{M}'_D$ for each reranked image associated with the label by
+%keeping only the highest score for each query descriptor.  Scoring
+%function $Sim$ is then applied to this aggregate set. We refer to this
+%method as \emph{label scoring}.

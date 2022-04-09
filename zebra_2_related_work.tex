@@ -1,0 +1,77 @@
+\newcommand{\plusequals}{\hspace*{1mm}+\hspace*{-1mm}=}
+
+\section {Related Work}
+
+\textbf{Animal Identification:}
+A variety of techniques have been proposed for animal identification \cite{si04BradfieldFrogPhoto, aje09ShorrocksNeckNet, fiz07SpeedSpotMatch}.
+We outline the two most closely related in terms of feature
+representation, matching, scoring, and results.
+
+StripeSpotter \cite{icmr11LahiriStripeSpotter} bases recognition on features
+called stripe-codes, two dimensional strings of binary values
+designed to capture the typical stripe patterns of zebras.
+Similarity between stripe-codes is measured by a
+modified edit-distance dynamic-programming algorithm.  Queries are run
+by measuring similarity to each database image individually and
+returning the top matches.  On a database of 85 plains %(Grey's ??) From what I remember it was only plains. SS didn't work too well on Grevys
+zebras, StripeSpotter achieves a median correct rank of 4.
+
+Wild-ID \cite{11BoldgerWILDID} uses the original SIFT
+\cite{ijcv04LoweSIFT} features and descriptors. It scores the query
+image against each database image separately. For each feature in
+the query image, the best match is found in each database image. These
+matches are tested for inter-image consistency using randomly-sampled
+triples of matches, a variation on more typical RANSAC methods.  The
+score of each database image is the proportion of consistent triples.
+On a database of 100 Wildebeest images, Wild-ID achieved a
+false positive rate of $8.1 \times 10^{-4}$, with a false rejection
+rate ranging from $.06-.08$ \cite{joae12MorrisonWetSeason}.  In our
+one-vs-one algorithm we return to more common methods and introduce a
+number of recent innovations to produce somewhat better performance.
+
+Turning to the computer vision literature, \emph{instance recognition}
+is the problem of finding the images in a database that match a query
+image.  By contrast, \emph{category recognition} is the problem of
+identifying the class an image belongs to --- e.g.\ car, person,
+bicycle --- rather than identifying a particular instance of the
+class. Our problem is closely related to instance recognition,
+but we are more interested in identifying (labeling) the
+object (animal) than in finding all images.
+
+Research in instance recognition during the last decade has primarily
+focused on large-scale search, starting with the development of visual
+vocabularies \cite{iccv03SivicZissermanVideoGoogle} and fast matching
+through vocabulary tree construction
+\cite{cvpr06NisterSteweniusVocabTree}.  Typical
+methods \cite{cvpr07PhilbinObjRetriev} build a visual vocabulary with
+millions of words and represent images as visual-word vectors.
+Scores between two images are computed using the TF-IDF
+\cite{iccv03SivicZissermanVideoGoogle} weighted distance between
+query and database visual-word vectors.  Searching large databases is
+done efficiently by using an inverted file.  Spatial
+verification re-ranks query results to produce a final
+ranking of matches to the database image.  Recent innovations include
+query expansion \cite{cvpr12ChumTotalRecallII}, Hamming
+embedding, \cite{ijcv09JegouDouzeSchmidImprovBOF}, and feature augmentation
+\cite{cvpr12ArandjelovicThreeThings}.
+In our work, we adopt several of these features but ignore others
+because (a) we are only interested in correctly identifying the animal (high precision) not
+finding all matching images (total recall), and (b) we do not want to incur expensive preprocessing.
+% These issues are discussed further in the conclusion
+% of the paper.
+
+Category recognition methods have
+tended to use dense sets of features and descriptors \cite{cvpr06SchmidBeyondBOF}, with
+much smaller vocabularies than instance recognition methods.
+By contrast, Boiman et al.\ \cite{cvpr08BoimanInDefenseNN} demonstrate the harmful
+effect of quantization and describe an alternative non-quantized
+approach. Given a set of query image descriptors, for every category, its match score is the sum of the square distances
+between each query descriptor and the closet descriptor from that category, regardless of the
+descriptor's parent image.
+%   While this produces good
+% results, its computation is linear in the number of categories.
+McCann and Lowe \cite{cvpr11McCannLNBNN} generalized this by simultaneously matching
+each query descriptor to its $k$ nearest neighbors across all categories.  Our
+one-vs-many algorithm applies this technique to animal
+identification.
+% and generalizes its scoring mechanism.

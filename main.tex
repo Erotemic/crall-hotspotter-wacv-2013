@@ -1,0 +1,131 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{wacv2013-author-kit/latex/wacv}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tabularx}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{multirow}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+
+%\usepackage{subfig}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{ifxetex}
+\ifxetex
+\usepackage{fontspec}
+\setmainfont{OpenDyslexic-Regular}
+\fi
+
+%\graphicspath{{./eps/}}{figures/FinalImages}
+
+%\usepackage[dvips]{graphicx}
+
+\input{perso.sty}
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+\newcommand{\argmax}[1]{\underset{#1}{\operatorname{argmax}}}
+\newcommand{\argmin}[1]{\underset{#1}{\operatorname{argmin}}}
+
+\newlength{\subfigheight}
+\setlength{\subfigheight}{1in}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[pagebackref=true,breaklinks=true,letterpaper=true,colorlinks,bookmarks=false]{hyperref}
+
+\wacvfinalcopy % *** Uncomment this line for the final submission
+
+\def\wacvPaperID{74} % *** Enter the wacv Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+% Pages are numbered in submission mode, and unnumbered in camera-ready
+\ifwacvfinal\pagestyle{empty}\fi
+\begin{document}
+
+%%%%%%%%% TITLE
+
+%\title{Hot Spotter - A Local Naive Bayes Approach to Instance Recognition}
+\title{HotSpotter - Patterned Species Instance Recognition}
+
+\author{Jonathan P. Crall\\
+Rensselaer Polytechnic Institute\\
+%110 8th Street  Troy, NY 12180\\
+{\tt\small cralljp@cs.rpi.edu}
+\and
+Charles V. Stewart\\
+Rensselaer Polytechnic Institute\\
+%110 8th Street  Troy, NY 12180\\
+{\tt\small stewart@cs.rpi.edu}
+\and
+Tanya Y. Berger-Wolf\\
+University of Illinois-Chicago\\
+{\tt\small tanyabw@uic.edu}\\
+\and
+Daniel I. Rubenstein\\
+Princeton University\\
+{\tt\small dir@princeton.edu}\\
+\and
+Siva R. Sundaresan\\
+Denver Zoological Foundation\\
+{\tt\small ssundare@princeton.edu}\\
+}
+
+\maketitle
+% \thispagestyle{empty}
+
+\begin{abstract}
+We present HotSpotter, a fast, accurate algorithm
+for identifying individual animals against a labeled database.
+It is not species specific and has been applied to
+Grevy's and plains zebras, giraffes, leopards, and lionfish.
+We describe two approaches,
+both based on extracting and matching keypoints or ``hotspots''.
+The first tests each new query image sequentially against each
+database image, generating a score for each database image
+in isolation, and ranking the results. The second, building
+on recent techniques for instance recognition, matches
+the query image against the database using a fast nearest
+neighbor search.  It uses a competitive scoring
+mechanism derived from the Local Naive Bayes Nearest
+Neighbor algorithm recently proposed for category recognition.
+We demonstrate results on databases of more than
+1000 images, producing more accurate matches than published
+methods and matching each query image in just a few seconds.
+\end{abstract}
+
+
+\input{zebra_1_introduction}
+
+\input{zebra_2_related_work}
+
+\input{zebra_3_one_against_one}
+
+\input{zebra_4_one_against_many}
+
+\input{zebra_5_experiments}
+
+\input{zebra_6_conclusion}
+
+
+{\small
+\bibliographystyle{wacv2013-author-kit/latex/ieee}
+\bibliography{crall_bibfile_ordered}
+%\bibliography{crall_bibfile.bib}
+
+}
+
+\end{document}
+
+

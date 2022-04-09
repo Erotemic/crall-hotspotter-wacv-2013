@@ -1,0 +1,40 @@
+\section{Conclusion}
+
+We have presented HotSpotter, an algorithm for fast,
+reliable, multi-species animal identification based on
+extracting and matching keypoints and descriptors.  In addition to the
+construction and testing of the overall system, the primary technical
+contribution of our work is the development of a fast and scalable
+one-vs-many scoring mechanism which outperforms current brute force
+one-vs-one image comparison methods in both speed and accuracy.  The
+key to the success of HotSpotter is the use of viewpoint invariant
+descriptors and a scoring mechanism that emphasizes the most
+distinctiveness keypoints and descriptors by allowing only the $k$
+nearest neighbors of any descriptor to participate in the scoring.
+This has been borne out on experiments with Grevy's zebras, plains
+zebras, giraffes, leopards and lionfish.
+
+From the perspective of the application, the failures are generally
+manageable through human interaction to eliminate problems due to (a)
+ROIs that overlap multiple animals, (b) matching
+against background, and (c) poor quality images. Additional algorithms
+could help identify and eliminate these problems as well.  Other
+failures --- those due to viewpoint variations --- are the most difficult to handle. The
+best way to address this is to incorporate multiple images and
+viewpoints into the database for each animal.
+
+Looking toward future experimental work, we will  
+  apply the software to a wider variety of species, which will test the limit 
+  recognition based on distinctive feature matching. From the perspective 
+of both the algorithm and the practical application,
+ the next major step for HotSpotter is to build and manage a dynamically
+constructed database of animal images and labels.  This is the focus of
+our ongoing effort.
+
+
+%  We have evaluated several flavors of scoring using techniques based on the local naive Bayes nearest neighbor framework and found comparable performance across the board.
+
+%  We briefly discussed and evaluated a method for extreme memory scalability using product quantization
+%  and show that excellent results can still be achieved by matching to multiple nearest neighbors.
+
+%  During our research we encountered the question: "How do we build a dynamic image database which can be searched quickly?" We leave this issue open to be addressed in future work.

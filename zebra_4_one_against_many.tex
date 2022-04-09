@@ -1,0 +1,109 @@
+
+\section {One-Vs-Many Matching}
+
+Our one-vs-many algorithm is described relative to the one-vs-one algorithm.
+These modifications give one-vs-many a logarithmic running time in the number
+of database descriptors. We achieve this by deriving a new matching algorithm
+for multi-image search from the Local Naive Bayes Nearest Neighbor (LNBNN) method \cite{cvpr11McCannLNBNN}.
+
+\subsection {Preprocessing For Faster Search}
+
+Feature extraction is identical to one-vs-one, but
+computation of the efficient search data structure is very different.
+
+Unlike one-vs-one, no search data structure is computed for the query image.
+One-vs-many preprocessing computes \emph{one} nearest neighbor
+data structure to index \emph{all} database descriptors.  This is
+a small forest of k-d trees \cite{cvpr08HartleyKDTree}.   We refer to the aggregate
+set of database descriptors as $\mathcal{D}_{\tt all}$.
+
+\subsection{Descriptor Matching and Match Scoring} \label{sec:match2}
+
+Similar to LNBNN \cite{cvpr11McCannLNBNN} for each query image descriptor $\vect{q} \in \mathcal{D}_Q$, the $k+1$
+approximate nearest neighbors, $\{ \vect{d}_1, \vect{d}_2, ... \vect{d}_{k+1} \} \subset \mathcal{D}_{\tt all}$ are found by
+searching the forest of k-d trees.  These are ordered by non-decreasing distance from $\vect{q}$.
+Scores are computed for the first $k$ of these (and added to their
+associated images) using the squared distance to the $(k+1)$-th neighbor as a normalizer.
+
+Looking at this intuitively, if
+there were just one database image, then we would be in the same
+scenario as the one-vs-one matching, except with the roles of the
+query and database images reversed, and our scoring mechanism should
+reflect this.  On the other hand, in the usual
+case where there are many more than $k$ database images, every query descriptor will only
+generate scores for (at most) $k$ of them.  Matches for database
+descriptors whose distances are beyond the $k$, just like matches
+whose ratio scores are below the ratio cut-off in one-vs-one
+matching, are considered non-distinct and (implicitly) given a score
+of 0.
+
+We present four scoring methods, using $\delta$ to denote the score
+instead of $r$ (Equation~\ref{eqn:ratio}):
+
+\begin{enumerate}
+\item Applying the measure from LNBNN \cite{cvpr11McCannLNBNN} (modified to a maximization),  we define:
+%Maybe rename this diff?
+\begin{equation}
+ \delta_{\tt LNBNN} (\vect{q},\vect{d}_{p},\vect{d}_{k+1}) = ||\vect{d}_{k+1} -  \vect{q}||^2  -  ||\vect{d}_{p} -  \vect{q}||^2
+\end{equation}
+This is just the difference in distances between the $p$-th and
+$(k+1)$-th nearest neighbors. It tends towards 0 when the normalizing
+feature is numerically close to the matching feature (hence not distinct).
+
+\item We generalize the ratio score in Section~\ref{sec:matching1} to $k$ nearest neighbors:
+\begin{equation}
+  \delta_{\tt ratio} (\vect{q},\vect{d}_{p},\vect{d}_{k+1})  = \frac{||\vect{d}_{k+1} -  \vect{q}||^2}{||\vect{d}_{p} -  \vect{q}||^2}
+\end{equation}
+Note that when $k=1$, this is like the ratio test, but applied across
+all database images, not just one.
+
+\item We introduce a log-ratio score to drive the previous score to 0 when the matches are non-distinct:
+\begin{equation}
+  \delta_{\tt lnrat} (\vect{q},\vect{d}_{p},\vect{d}_{k+1})  = \ln(\frac{||\vect{d}_{k+1} -  \vect{q}||^2}{||\vect{d}_{p} -  \vect{q}||^2})
+\end{equation}
+
+\item As a sanity check we use match counting:
+\begin{equation}
+ \delta_{\tt count} (\vect{q},\vect{d}_{p},\vect{d}_{k+1}) = 1
+\end{equation}
+\end{enumerate}
+
+If $\vect{q}$ is the $j$-th query image descriptor and if the $p$-th
+closest descriptor is at descriptor index $i$ in its original database
+image, $I_D$, then triple $(i,j,\delta(...))$ is appended to the match
+set $\mathcal{M}_{D}$ for $I_D$.  Overall, if there are $M$ query
+image descriptors, then $M k$ scores are generated and distributed
+across all database images.
+
+Once matching is complete, the initial image scoring
+(Sec.~\ref{sec:iis}), spatial reranking (Sec.~\ref{sec:rerank1}) and
+scoring of labels (Sec.~\ref{sec:nmscore1}) are all applied, just as in
+the one-vs-one algorithm.
+
+
+\subsection{Scaling to extremely large databases}
+
+Our nearest neighbor methods are much simpler than the usual TF-IDF
+scoring mechanism used in large-scale instance recognition, avoiding
+the expensive off-line subcomputation of building the vocabulary and
+inverted-file structure \cite{cvpr07PhilbinObjRetriev}.
+If we can demonstrate that these are
+effective, we will have taken a strong step toward a flexible, dynamic
+database.  One drawback to our approach, however, is that each of the
+original descriptor vectors is stored in memory as opposed to
+quantized vectors.
+
+To address this problem, we investigate replacing our k-d tree
+indexing of database descriptor vectors with the product
+quantization technique introduced by J\'{e}gou \etal~\cite{pami11JegouDouzeSchmidProdQuant}.
+Product quantization is a method of computing
+approximate nearest neighbors by splitting a (descriptor) vector
+$\vect{z} = (z_1, z_2, \ldots, z_n)$ into $m$
+subvectors $(\vect{u}_1, ..., \vect{u}_m)$, each of which is quantized
+individually with a relatively small, separate vocabulary.  The
+trick is that the representation is very small, but the implicit
+vocabulary (number of distinct vectors) is enormous.  We use $m=16$
+making each $\vect{u}_i$ length 8, and quantize at 128 words per
+subvector.  This structure represents $5 \times 10^{33}$ distinct vectors and is 16 times smaller than the k-d
+tree forest representation.  We explore the effects of this technique on match
+quality.

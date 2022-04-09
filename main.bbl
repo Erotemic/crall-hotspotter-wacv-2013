@@ -1,0 +1,150 @@
+\begin{thebibliography}{10}\itemsep=-1pt
+
+\bibitem{cvpr12ArandjelovicThreeThings}
+R.~Arandjelovic and A.~Zisserman.
+\newblock Three things everyone should know to improve object retrieval.
+\newblock In {\em CVPR}, 2012.
+
+\bibitem{jae05HolmbergAstroWhaleShark}
+Z.~Arzoumanian, J.~Holmberg, and B.~Norman.
+\newblock An astronomical pattern-matching algorithm for computer-aided
+  identification of whale sharks rhincodon typus.
+\newblock {\em Journal of Applied Ecology}, 2005.
+
+\bibitem{cvpr08BoimanInDefenseNN}
+O.~Boiman, E.~Shechtman, and M.~Irani.
+\newblock In defense of nearest-neighbor based image classification.
+\newblock In {\em CVPR}, 2008.
+
+\bibitem{11BoldgerWILDID}
+Bolger, Vance, Morrison, and Farid.
+\newblock Wild-id user guide: Pattern extraction and matching software for
+  computer-assisted photographic mark-recapture analysis.
+\newblock
+  \url{http://software.dartmouth.edu/Macintosh/Academic/Wild-ID_1.0.0.zip},
+  2011.
+
+\bibitem{si04BradfieldFrogPhoto}
+K.~Bradfield.
+\newblock Photographic identification of individual archey's frogs.
+\newblock In {\em Science Internal Series}, 2004.
+
+\bibitem{cvpr12ChumTotalRecallII}
+Chum, Mikulik, Perd\`{o}ch, and Matas.
+\newblock Total recall ii: Query expansion revisited.
+\newblock In {\em CVPR}, 2011.
+
+\bibitem{accv04ChumLORANSAC}
+O.~Chum, J.~Matas, and S.~Obdrzalek.
+\newblock Enhancing ransac by generalized model optimization.
+\newblock In {\em ACCV}, 2004.
+
+\bibitem{wsb94ElbinMicrochipIden}
+S.~B. Elbin and J.~Burger.
+\newblock In my experience: Implantable microchips for individual
+  identification in wild and captive populations.
+\newblock In {\em Wildlife Society Bulletin}, 1994.
+
+\bibitem{ijcv09JegouDouzeSchmidImprovBOF}
+H.~J{\'e}gou, M.~Douze, and C.~Schmid.
+\newblock Improving bag-of-features for large scale image search.
+\newblock {\em IJCV}, 2010.
+
+\bibitem{pami11JegouDouzeSchmidProdQuant}
+H.~J\'{e}gou, M.~Douze, and C.~Schmid.
+\newblock Product quantization for nearest neighbor search.
+\newblock {\em PAMI}, 2011.
+
+\bibitem{icmr11LahiriStripeSpotter}
+M.~Lahiri, C.~Tantipathananandh, R.~Warungu, D.~Rubenstein, and T.~Berger-Wolf.
+\newblock Biometric animal databases from field photographs: Identification of
+  individual zebra in the wild.
+\newblock In {\em ICMR}, 2011.
+
+\bibitem{cvpr06SchmidBeyondBOF}
+S.~Lazebnik, C.~Schmid, and J.~Ponce.
+\newblock Beyond bags of features: Spatial pyramid matching for recognizing
+  natural scene categories.
+\newblock In {\em CVPR}, 2006.
+
+\bibitem{ijcv04LoweSIFT}
+D.~G. Lowe.
+\newblock Distinctive image features from scale-invariant keypoints.
+\newblock {\em IJCV}, 2004.
+
+\bibitem{cvpr11McCannLNBNN}
+S.~McCann and D.~G. Lowe.
+\newblock Local naive bayes nearest neighbor for image classification.
+\newblock {\em CVPR}, 2011.
+
+\bibitem{ijcv05MikolajczykAffineRegion}
+K.~Mikolajczyk, T.~Tuytelaars, C.~Schmid, A.~Zisserman, J.~Matas,
+  F.~Schaffalitzky, T.~Kadir, and L.~Gool.
+\newblock A comparison of affine region detectors.
+\newblock {\em IJCV}, 2005.
+
+\bibitem{joae12MorrisonWetSeason}
+T.~Morrison and D.~Bolger.
+\newblock Wet season range fidelity in a tropical migratory ungulate.
+\newblock {\em Journal of Animal Ecology}, 2012.
+
+\bibitem{cvpr06NisterSteweniusVocabTree}
+D.~Nister and H.~Stewenius.
+\newblock Scalable recognition with a vocabulary tree.
+\newblock In {\em CVPR}, 2006.
+
+\bibitem{cvpr09PerdochEfficRep}
+M.~Perd\`{o}ch, O.~Chum, and J.~Matas.
+\newblock Efficient representation of local geometry for large scale object
+  retrieval.
+\newblock In {\em CVPR}, june 2009.
+
+\bibitem{cvpr07PhilbinObjRetriev}
+J.~Philbin, O.~Chum, M.~Isard, J.~Sivic, and A.~Zisserman.
+\newblock Object retrieval with large vocabularies and fast spatial matching.
+\newblock In {\em CVPR}, 2007.
+
+\bibitem{ipc10SherleyCVPenguin}
+R.~B. Sherley, T.~Burghardt, P.~J. Barham, and I.~C. Cuthill.
+\newblock Computer vision monitoring of african penguins spheniscus demersus:
+  New data on the field capacity from robben island.
+\newblock In {\em IPC}, 2010.
+
+\bibitem{aje09ShorrocksNeckNet}
+B.~Shorrocks and D.~P. Croft.
+\newblock Necks and networks: a preliminary study of population structure in
+  the reticulated giraffe (giraffa camelopardalis reticulata de winston).
+\newblock {\em African Journal of Ecology}, 2009.
+
+\bibitem{cvpr08HartleyKDTree}
+C.~Silpa-Anan and R.~Hartley.
+\newblock Optimised kd-trees for fast image descriptor matching.
+\newblock In {\em CVPR}, 2008.
+
+\bibitem{iccv03SivicZissermanVideoGoogle}
+J.~Sivic and A.~Zisserman.
+\newblock Video google: a text retrieval approach to object matching in videos.
+\newblock In {\em ICCV}, 2003.
+
+\bibitem{fiz07SpeedSpotMatch}
+C.~Speed, M.~Meekan, and C.~Bradshaw.
+\newblock Spot the match - wildlife photo-identification using information
+  theory.
+\newblock {\em Frontiers in Zoology}, 2007.
+
+\bibitem{picm10VedaldiVLFEAT}
+A.~Vedaldi and B.~Fulkerson.
+\newblock Vlfeat: an open and portable library of computer vision algorithms.
+\newblock In {\em MMM}, 2010.
+
+\bibitem{williams2002status}
+S.~Williams.
+\newblock Status and action plan for the grevy's zebra (equus grevyi).
+\newblock {\em Equids: Zebras, Asses, and Horses}, 2002.
+
+\bibitem{acmss04ZhangZebraNet}
+P.~Zhang, C.~M. Sadler, S.~A. Lyon, and M.~Martonosi.
+\newblock Hardware design experiences in zebranet.
+\newblock In {\em Embedded networked sensor systems}. ACM, 2004.
+
+\end{thebibliography}
